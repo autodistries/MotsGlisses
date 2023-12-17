@@ -16,12 +16,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Go to app directory
+      run: cd MotsGlissés
+    - name: I have no idea how this works
+      run: pwd
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-    - name: Go to app directory
-      run: cd MotsGlissés
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
