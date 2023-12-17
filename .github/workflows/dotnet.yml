@@ -17,9 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Go to app directory
-      run: cd MotsGlisses
+      run: cd MotsGlissés
     - name: I have no idea how this works
-      run: ls
+      run: ls && pwd
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
