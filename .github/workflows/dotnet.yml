@@ -21,7 +21,7 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Go to app directory
-            run: cd MotsGlissés
+      run: cd MotsGlissés
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
