@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Go to app directory
-      run: cd MotsGlissés
+      run: cd MotsGlisses/MotsGlissés
     - name: I have no idea how this works
       run: ls
     - name: Setup .NET
