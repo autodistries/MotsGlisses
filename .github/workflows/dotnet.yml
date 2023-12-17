@@ -19,7 +19,7 @@ jobs:
     - name: Go to app directory
       run: cd MotsGlissés
     - name: I have no idea how this works
-      run: pwd
+      run: ls
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
