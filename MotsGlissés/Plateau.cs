@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MOTS_GLISSES
 {
@@ -23,7 +24,14 @@ namespace MOTS_GLISSES
         /// </summary>
         public Plateau(string? targetPath=null) {
             if (targetPath!=null)  ToRead(targetPath);
+             string dirToSearchIn = "../../../";
+            if (!File.Exists(dirToSearchIn+"Lettre.txt")) dirToSearchIn="./";
+            availableCharacters = ReadAvailableCharacters(dirToSearchIn + "Lettre.txt")!;
+            if (availableCharacters==null) distrubutedcharacters=false;
+
         } 
+
+        
         public void CreateNewGame()
         {
             DistributeCharacters();
@@ -321,7 +329,7 @@ namespace MOTS_GLISSES
             }
             if (!File.Exists(targetPath))
             {
-                Console.WriteLine("Could find specified file at " + targetPath);
+                Console.WriteLine("Could not find specified file at " + targetPath);
                 return null;
             }
             string[] fileData = File.ReadAllLines(targetPath);
@@ -465,40 +473,69 @@ namespace MOTS_GLISSES
             if (!Directory.Exists(Path.GetDirectoryName(filename)))
             {
                 Console.WriteLine("Impossible de trouver le dossier en question.");
-                return;
+                return ;
             }
             if (!File.Exists(filename))
             {
                 Console.WriteLine("Impossible de trouver le fichier en question.");
-                return;
+                return ;
             }
             try
             {
                 string[] entries = File.ReadAllLines(filename);
                 dimension = entries.Length;
-                tileschar = new char[dimension, dimension];
-                for (int i = 0; i < tileschar.GetLength(0); i++)
+                char[,] testPlt = new char[dimension, dimension];
+                for (int i = 0; i < testPlt.GetLength(0); i++)
                 {
-                    string entry = entries[i];
+                    string entry = entries[i].ToUpper();
                     string[] data = entry.Split(separator: ';');
                     if (data.Length == 1)
                     {
                         data = entry.Split(separator: ',');
                     }
+                    if (data.Length!=entries.Length) {
+                        throw new Exception("Inconsistences détéctées dans les dimensions.");
+                    }
 
-                    for (int j = 0; j < tileschar.GetLength(1); j++)
+                    for (int j = 0; j < testPlt.GetLength(1); j++)
                     {
-                        tileschar[i, j] = data[j][0];
+                        testPlt[i, j] = data[j][0];
 
                     }
                 }
                 distrubutedcharacters = true;
                 Console.WriteLine("Plateau importé avec succès.");
+                if (QtyOfEmptys(testPlt)>0.6) {
+                    Console.WriteLine("Le plateau semble mal formé; vérifiez votre fichier d'import.");
+                        throw new Exception("Inconsistences détéctées dans le contenu du tableau.");
+                }
+                tileschar = testPlt;
+                return;
+
             }
             catch
             {
                 Console.WriteLine("Le parsing du plateau a échoué. Vérifiez sa mise en forme et recommencez.");
+                CreateNewGame();
+                return;
             }
+        }
+
+        public double QtyOfEmptys(char[,] tbl) {
+
+            int a = tbl.Length;
+            if (tbl.Length<1) return 1;
+            int b=0;
+            for (int i = 0; i < tbl.GetLength(0); i++) {
+                for (int j = 0; j < tbl.GetLength(1); j++) {
+                    if (tbl[i, j]== ' ') {
+                        b++;
+                    }
+                }
+            }
+            return b/a;
+            
+
         }
     }
 }

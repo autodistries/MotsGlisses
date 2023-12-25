@@ -28,6 +28,7 @@
             {
                 Load_Word();//S'occupe de charger tous les mots dans all_word
             }
+            if (all_word == Array.Empty<string>() ||all_word.Length==0) return;
             if (nbdemotlongueur.Count == 0)
             {
                 LoadDictionnairelongueur();//S'occupe de charger le nombre de mot en fonction de leur longueur
@@ -63,7 +64,8 @@
         {
             for (int i = 0; i < all_word.Length; i++)
             {
-                if (nbdemotparlettre.ContainsKey(all_word[i][0]))
+                if(all_word[i]=="") { }
+                else if (nbdemotparlettre.ContainsKey(all_word[i][0]))
                 {
                     nbdemotparlettre[all_word[i][0]]++;
                 }
@@ -124,8 +126,9 @@
         public static bool AppelleRechercheDicho(string searched_word)
         {
             Init();
+            if (all_word.Length == 0) return false;
             searched_word = searched_word.ToUpper();
-            return RechDichoRecursif(searched_word, 0, all_word.Length);
+            return RechDichoRecursif(searched_word, 0, all_word.Length -1);
         }
         /// <summary>
         /// la vrai fonction de recherche dichotomique
@@ -164,8 +167,10 @@
         {
             string dirToSearchIn = "../../../";
             if (!File.Exists(dirToSearchIn+"Mots_Français.txt")) dirToSearchIn = "./";
+            if (!File.Exists(dirToSearchIn + "Mots_Français.txt")) {Console.WriteLine("Could not find Mots_Français.txt"); return;}
             StreamReader word_reader = new(dirToSearchIn+"Mots_Français.txt");
             string word = word_reader.ReadToEnd();
+            word += " ";
             word_reader.Close();
             string[] unsortedwords = word.Split(' ');
             all_word = Tri_Fusion(unsortedwords);

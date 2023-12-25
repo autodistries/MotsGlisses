@@ -132,6 +132,7 @@ namespace MOTS_GLISSES
         {
             // Your code to send a message can go here
             Console.WriteLine("\nAu revoir !");
+            Console.WriteLine();
 
         };
 
@@ -144,7 +145,7 @@ namespace MOTS_GLISSES
             {
                 Console.WriteLine("Aïe, un problème est survenu: ");
                 Console.WriteLine(problem);
-                Console.WriteLine("Vous pouvez reporter l'erreur en ouvrant une issue sur Github: https://github.com/autodistries/MotsGlisses");
+                Console.WriteLine("Vous pouvez reporter l'erreur en ouvrant une issue sur le github");
 
             }
 
@@ -172,7 +173,7 @@ namespace MOTS_GLISSES
 ██║   ██║██║     ██║╚════██║╚════██║██╔══╝  ╚════██║
 ╚██████╔╝███████╗██║███████║███████║███████╗███████║
  ╚═════╝ ╚══════╝╚═╝╚══════╝╚══════╝╚══════╝╚══════╝");
-            Console.WriteLine($"{magentaText("© https://github.com/autodistries, https://github.com/Infarcactus, 2023 - ")}{greenText("license")}{magentaText(" GNU GPLv3")}");
+            Console.WriteLine($"{magentaText("© autodistries, infarctus, 2023 - ")}{greenText("license")}{magentaText(" GNU GPLv3")}");
 
             Console.Write($"Bienvenue. Faites {greenText("help")} pour de l'aide, ou {greenText("qs")} pour sauter toute configuration.\nEntrez une commande: ");
             while (true)
@@ -188,11 +189,6 @@ namespace MOTS_GLISSES
                     case "a":
                     case "h":
                     case "aide":
-
-
-
-
-
                     case "help":
                         {
                             bool all = false; // Si 'all' est entré, afficher les alias en plus
@@ -252,14 +248,6 @@ namespace MOTS_GLISSES
                             Console.WriteLine(res);
                             continue;
                         }
-
-
-
-
-
-
-
-
 
                     case "qs":
                     case "qs1":
@@ -501,7 +489,14 @@ Arcade, où le plateau est regénéré lorsque les joueurs le veulent. Ce mode n
                             }
                             else if ((new string[] { "i", "importer", "import" }).Any((them) => them == splitInput[1]))
                             {
-                                if (splitInput.Length == 2) plateau.ToRead("./plateau.csv");
+
+
+  if (splitInput.Length == 2)
+                                {
+                                    if (File.Exists("./plateau.csv")) { plateau = new("./plateau.csv"); } else { plateau = new("../../../plateau.csv"); }
+
+                                }
+                               
                                 else plateau = new(string.Join(" ", splitInput.Skip(2)));
                                 Console.WriteLine("Nouveau plateau:");
                                 plateau.AfficherPlateau();
@@ -509,7 +504,11 @@ Arcade, où le plateau est regénéré lorsque les joueurs le veulent. Ce mode n
                             }
                             else if ((new string[] { "e", "exporter", "export", "s", "save" }).Any((them) => them == splitInput[1]))
                             {
-                                if (splitInput.Length == 2) plateau.ToFile("./plateau.csv");
+                               if (splitInput.Length == 2)
+                                {
+                                    if (File.Exists("./plateau.csv")) { plateau.ToFile("./plateau.csv"); } else { plateau.ToFile("../../../plateau.csv"); }
+
+                                }
                                 else plateau.ToFile(string.Join(" ", splitInput.Skip(2))); // fonctionne même avec des espaces !
 
                                 continue;
@@ -703,6 +702,10 @@ Arcade, où le plateau est regénéré lorsque les joueurs le veulent. Ce mode n
                 return;
 
             }
+            if (plateau.QtyOfEmptys(plateau.Tileschar) > 0.7)
+            {
+                Console.WriteLine("Le plateau pourrait être mal formé; quittez le jeusi besoin, vérifiez votre fichier d'import et/ou regénérez un plateau.");
+            }
             TempsRestant = TempsBase;
 
             //initialisation des variables de jeu
@@ -759,6 +762,7 @@ Attention, la partie se finira dans " + redText($"{TempsBase}s") + " !");
             Gagnant = null;
             RaisonDeGagnage = null;
             PlayersThatGaveUp.Clear();
+            PlayersThatPassed.Clear();
             CurrentPlayerTurnTime = -1;
             AQuiLeTour = 0;
 
@@ -891,7 +895,7 @@ Attention, la partie se finira dans " + redText($"{TempsBase}s") + " !");
                 }
                 else
                 {
-                    userInput = "";
+                    userInput = "ERUIIRJ";
                 }
             }
 
